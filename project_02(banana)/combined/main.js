@@ -177,6 +177,10 @@ function setScene(scene) {
   audioManhattan.pause(); audioManhattan.currentTime = 0;
   if (scene === 'tokyo')     audioTokyo.play().catch(() => {});
   else if (scene === 'manhattan') audioManhattan.play().catch(() => {});
+  else if (scene === 'both') {
+    audioTokyo.play().catch(() => {});
+    audioManhattan.play().catch(() => {});
+  }
 }
 
 // ---- Marquee (3 bars, different speeds) ----

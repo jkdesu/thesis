@@ -604,39 +604,26 @@
         ? activityEndedAt - activityStartedAt
         : 0;
     const exerciseDuration = formatDuration(exerciseMs);
-    const timelineRows = getSamplesForDisplayGrid();
-    const timelineBlock =
-      timelineRows.length === 0
-        ? `
-  <hr class="receipt-thermal__hr" />
-  <p class="receipt-thermal__h">EVERY-SECOND CAPTURES</p>
-  <p class="receipt-thermal__note">No timeline samples (camera or face detection may have been unavailable).</p>`
-        : `
-  <hr class="receipt-thermal__hr" />
-  <p class="receipt-thermal__h">EVERY-SECOND CAPTURES (SAMPLE)</p>
-  <div class="receipt-thermal__timeline">${timelineRows
-    .map(
-      ({ sample, label }) =>
-        `<div class="receipt-thermal__tl-cell"><img src="${escapeHtml(sample.src)}" alt="" /><span>#${label}</span></div>`
-    )
-    .join("")}</div>`;
+    const firstTimelinePhoto = activityPhotoSamples.length > 0 ? activityPhotoSamples[0].src : "";
+    const lastTimelinePhoto =
+      activityPhotoSamples.length > 0 ? activityPhotoSamples[activityPhotoSamples.length - 1].src : "";
     const photoBlock = `
   <hr class="receipt-thermal__hr" />
-  <p class="receipt-thermal__h">FACE SNAPSHOTS</p>
+  <p class="receipt-thermal__h">CAPTURED PHOTOS (FIRST / LAST)</p>
   <div class="receipt-thermal__photos">
     <div class="receipt-thermal__photo">
-      <span>START mood</span>
+      <span>FIRST capture</span>
       ${
-        firstMoodFacePhoto
-          ? `<img src="${escapeHtml(firstMoodFacePhoto)}" alt="Face snapshot at first mood selection" />`
+        firstTimelinePhoto || firstMoodFacePhoto
+          ? `<img src="${escapeHtml(firstTimelinePhoto || firstMoodFacePhoto)}" alt="First captured photo in activity timeline" />`
           : `<p class="receipt-thermal__missing">No photo captured</p>`
       }
     </div>
     <div class="receipt-thermal__photo">
-      <span>BUILD mood</span>
+      <span>LAST capture</span>
       ${
-        finalMoodFacePhoto
-          ? `<img src="${escapeHtml(finalMoodFacePhoto)}" alt="Face snapshot at final mood selection" />`
+        lastTimelinePhoto || finalMoodFacePhoto
+          ? `<img src="${escapeHtml(lastTimelinePhoto || finalMoodFacePhoto)}" alt="Last captured photo in activity timeline" />`
           : `<p class="receipt-thermal__missing">No photo captured</p>`
       }
     </div>
@@ -674,7 +661,6 @@
   <div class="receipt-thermal__row"><span>read</span><span>${escapeHtml(v.band)}</span></div>
   <div class="receipt-thermal__row"><span>completion time</span><span>${escapeHtml(exerciseDuration)}</span></div>
   <p class="receipt-thermal__f">moves: build phase Δ=${v.d1} · net vs start Δ=${v.d2}</p>
-  ${timelineBlock}
   ${photoBlock}
   <p class="receipt-thermal__note">~${nMax} mood slots. Index column is a map, not a label.</p>
   <p class="receipt-thermal__d">---- end ----</p>`;
@@ -699,7 +685,7 @@
       .receipt-thermal__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.4rem 0 0.5rem; }
       .receipt-thermal__photo { border: 1px solid #111; padding: 0.35rem; background: #fff; }
       .receipt-thermal__photo > span { display: block; font-size: 0.58rem; color: #333; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.04em; }
-      .receipt-thermal__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+      .receipt-thermal__photo img { width: 100%; aspect-ratio: auto; object-fit: contain; height: auto; display: block; background: #fff; }
       .receipt-thermal__missing { margin: 0; font-size: 0.58rem; color: #666; text-align: center; padding: 0.8rem 0.2rem; border: 1px dashed #aaa; background: #f7f7f7; }
       .receipt-thermal__timeline { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 2px; margin: 0.3rem 0 0.35rem; }
       .receipt-thermal__tl-cell { border: 1px solid #111; background: #fff; font-size: 0.42rem; text-align: center; overflow: hidden; }

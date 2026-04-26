@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Build Your Sandwich</title>
-    <link rel="stylesheet" href="style.css?v=37" />
+    <link rel="stylesheet" href="style.css?v=39" />
   </head>
   <body>
     <div class="exhibition-topbar">
@@ -72,7 +72,6 @@
             <img src="sandwich_jpeg/sandwich3.jpeg" alt="Sandwich reference image 3" loading="lazy" />
           </figure>
         </section>
-        <p class="flow-step__sub" id="step1Sub">Use the same mood index and select one feeling.</p>
         <div class="mood-grid mood-grid--feel" id="checkinMoodGrid" role="group" aria-label="How you feel right now, pick one"></div>
         <div class="flow-actions">
           <button type="button" class="btn-ghost" id="btnBack1">Back</button>
@@ -118,9 +117,7 @@
 
       <section class="flow-step flow-step--receipt" id="step3" data-step="3" aria-labelledby="step3Title" hidden>
         <h2 class="flow-step__title" id="step3Title">Now look at your sandwich and identify your mood</h2>
-        <p class="flow-step__context" id="step3Context" aria-live="polite">
-          <strong>Left</strong> — your sandwich at full size. <strong>Right</strong> — select one mood from the same index.
-        </p>
+        <p class="flow-step__context" id="step3Context" aria-live="polite"></p>
 
         <div class="receipt-flow no-print">
           <div class="receipt-sandwich-block" aria-label="Your sandwich build">
@@ -167,6 +164,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=36"></script>
+    <script src="app.js?v=38"></script>
   </body>
 </html>
