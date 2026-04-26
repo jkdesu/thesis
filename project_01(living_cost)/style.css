@@ -1,0 +1,992 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+}
+
+.exhibition-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 44px;
+    background: #000;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    z-index: 2001;
+}
+
+.exhibition-home-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.exhibition-home-link:hover {
+    color: #ff5ad9;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-bottom: 2px solid black;
+    z-index: 999;
+    padding: 15px 0;
+}
+
+.navbar.hidden {
+    display: none;
+}
+
+.nav-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-title {
+    font-size: 24px;
+    margin: 0;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-button:hover {
+    background: black;
+    color: white;
+}
+
+/* Intro Panel Styles */
+.intro-panel {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 44px);
+    background: white;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.intro-panel.hidden {
+    display: none;
+}
+
+.intro-content {
+    max-width: 1200px;
+    text-align: center;
+    padding: 40px;
+}
+
+.intro-content h1 {
+    font-size: 48px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid black;
+    padding-bottom: 20px;
+}
+
+.intro-text {
+    margin-bottom: 40px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.intro-text p {
+    margin: 15px 0;
+}
+
+.survey-button-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    border: 2px solid black;
+    text-align: center;
+}
+
+.survey-button-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.survey-button {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.survey-button:hover {
+    background: black;
+    color: white;
+}
+
+.back-button {
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background: black;
+    color: white;
+}
+
+.compare-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    border: 2px solid black;
+    text-align: center;
+}
+
+.compare-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.city-options {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.city-option {
+    flex: 1;
+    max-width: 500px;
+    border: 2px solid black;
+    padding: 30px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.city-option h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.city-description {
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.8;
+    flex-grow: 1;
+}
+
+.city-description p {
+    margin: 12px 0;
+}
+
+.city-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.city-button:hover {
+    background: black;
+    color: white;
+}
+
+.compare-button {
+    padding: 20px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.compare-button:hover {
+    background: black;
+    color: white;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 44px);
+    margin-top: 44px;
+    padding-top: 0;
+}
+
+.container.with-nav {
+    padding-top: 70px;
+    height: calc(100vh - 44px - 70px);
+}
+
+.container.single-city .city-section {
+    width: 100%;
+}
+
+.container.single-city .city-section.hidden {
+    display: none;
+}
+
+.city-section {
+    width: 50%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.city-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid black;
+    min-height: 80px;
+}
+
+.city-header h1 {
+    font-size: 32px;
+    margin: 0;
+    flex: 1;
+    text-align: left;
+}
+
+.nyc .city-header h1 {
+    text-align: center;
+}
+
+.tokyo .city-header h1 {
+    text-align: left;
+}
+
+.container.single-city .tokyo .city-header h1 {
+    text-align: left;
+}
+
+.container.single-city .nyc .city-header h1 {
+    text-align: center;
+}
+
+.currency-toggle {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.currency-toggle:hover {
+    background: black;
+    color: white;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+}
+
+.item-card {
+    border: 1px solid black;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-card:hover {
+    opacity: 0.7;
+}
+
+.item-card.selected {
+    background: #f0f0f0;
+    border: 3px solid black;
+}
+
+.item-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.item-info {
+    padding: 10px;
+    text-align: center;
+}
+
+.item-number {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.item-name {
+    font-size: 12px;
+    margin-bottom: 5px;
+    min-height: 30px;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+    background: black;
+    color: white;
+}
+
+.quantity-display {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Budget Calculator Styles */
+.budget-calculator {
+    padding: 20px;
+    border-bottom: 2px solid black;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.budget-calculator.hidden {
+    display: none;
+}
+
+.container.with-nav .budget-calculator {
+    top: 70px;
+}
+
+.day-counter {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px solid black;
+}
+
+.budget-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.budget-row.expense {
+    color: #000;
+}
+
+.budget-row.expense .amount {
+    font-weight: bold;
+}
+
+.budget-row.remaining {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px 0 5px 0;
+}
+
+.budget-row .amount {
+    font-family: monospace;
+    font-size: 18px;
+}
+
+.budget-calculator hr {
+    margin: 15px 0;
+    border: none;
+    border-top: 2px solid black;
+}
+
+.items-list {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border: 1px solid black;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.items-list:empty {
+    display: none;
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+.item-row:last-child {
+    border-bottom: none;
+}
+
+.item-name-small {
+    flex: 1;
+    text-align: left;
+}
+
+.item-price-small {
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.submit-day-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-day-button:hover {
+    background: black;
+    color: white;
+}
+
+.tokyo {
+    border-right: 2px solid black;
+}
+
+/* ========================================
+   Price Volatility Panel Styles
+   ======================================== */
+
+.volatility-panel {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 44px);
+    background: white;
+    z-index: 1001;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.volatility-panel.hidden {
+    display: none;
+}
+
+.volatility-content {
+    max-width: 1100px;
+    width: 100%;
+    text-align: center;
+    padding: 20px 20px;
+    min-height: min-content;
+}
+
+.volatility-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.volatility-title-area {
+    flex: 1;
+    text-align: center;
+}
+
+.volatility-title-area h1 {
+    font-size: 42px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid black;
+    padding-bottom: 12px;
+}
+
+.volatility-subtitle {
+    font-size: 16px;
+    color: #666;
+}
+
+.back-button-top {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.back-button-top:hover {
+    background: black;
+    color: white;
+}
+
+.header-spacer {
+    width: 100px;
+}
+
+.volatility-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+    justify-content: center;
+}
+
+#volatility-progress {
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 60px;
+}
+
+.volatility-progress-track {
+    width: 250px;
+    height: 6px;
+    background: #ddd;
+    border: 1px solid black;
+    overflow: hidden;
+}
+
+.volatility-progress-fill {
+    height: 100%;
+    background: black;
+    transition: width 0.3s ease;
+}
+
+.volatility-item-title {
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* Main Content Area - Side by Side Layout */
+.volatility-main-area {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    margin: 0 auto 10px;
+    max-width: 950px;
+}
+
+.volatility-left,
+.volatility-right {
+    width: 420px;
+    height: 480px;
+}
+
+.volatility-right {
+    display: flex;
+    align-items: flex-start;
+}
+
+.volatility-single-display {
+    width: 420px;
+}
+
+.volatility-card {
+    border: 2px solid black;
+    padding: 25px;
+    width: 420px;
+    height: 440px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.volatility-card.animate-in {
+    opacity: 1;
+}
+
+.volatility-card.fade-out {
+    opacity: 0;
+}
+
+.volatility-img-container {
+    width: 370px;
+    height: 290px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.volatility-img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.volatility-price-tag {
+    text-align: center;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.volatility-price-main {
+    font-size: 42px;
+    font-weight: bold;
+}
+
+.volatility-price-sub {
+    font-size: 18px;
+    color: #666;
+    margin-top: 5px;
+    height: 24px;
+}
+
+.volatility-city-indicator {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.volatility-difference {
+    border: 2px solid black;
+    padding: 12px 25px;
+    margin: 0 auto 10px;
+    width: 450px;
+    height: 70px;
+    background: #f0f0f0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.volatility-difference.hidden {
+    visibility: hidden;
+}
+
+.volatility-diff-text {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.volatility-diff-percent {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.volatility-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.volatility-nav-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.volatility-nav-btn:hover {
+    background: black;
+    color: white;
+}
+
+.volatility-play-btn {
+    padding: 10px 28px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.volatility-play-btn:hover {
+    background: black;
+    color: white;
+}
+
+.volatility-play-btn.playing {
+    background: black;
+    color: white;
+}
+
+.volatility-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.volatility-dot {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+    padding: 0;
+}
+
+.volatility-dot:hover {
+    background: #ddd;
+}
+
+.volatility-dot.active {
+    background: black;
+}
+
+/* Expression Graph */
+.expression-graph-container {
+    margin: 15px auto 0;
+    padding: 15px;
+    border: 2px solid black;
+    max-width: 650px;
+    background: white;
+}
+
+.expression-graph-container h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+#expression-graph {
+    width: 100%;
+    height: 120px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* Face Tracking Styles */
+.reaction-tracker {
+    border: 2px solid black;
+    padding: 25px;
+    width: 420px;
+    height: 440px;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.reaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.reaction-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.tracking-status-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+.tracking-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ccc;
+}
+
+.tracking-status-dot.active { background: #44aa44; }
+.tracking-status-dot.warning { background: #ffaa00; }
+.tracking-status-dot.error { background: #ff4444; }
+
+.webcam-container {
+    position: relative;
+    width: 260px;
+    height: 195px;
+    margin: 0 auto 20px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    overflow: hidden;
+}
+
+#webcam-feed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.webcam-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    color: #999;
+    font-size: 12px;
+}
+
+.webcam-overlay.hidden { display: none; }
+
+.reaction-meters {
+    margin-bottom: 8px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reaction-meter {
+    margin-bottom: 12px;
+}
+
+.reaction-meter label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.reaction-bar-track {
+    width: 100%;
+    height: 16px;
+    background: #f0f0f0;
+    border: 1px solid black;
+}
+
+.reaction-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #44aa44;
+    transition: width 0.1s ease;
+}
+
+.reaction-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.reaction-value.peak {
+    font-size: 18px;
+    color: #666;
+}
+
+.toggle-tracking-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.toggle-tracking-btn:hover {
+    background: black;
+    color: white;
+}
+
+/* Responsive adjustments for volatility panel */
+
+@media (max-width: 1000px) {
+    .volatility-content {
+        transform: scale(0.8);
+        transform-origin: top center;
+    }
+}
+
+@media (max-width: 800px) {
+    .volatility-content {
+        transform: scale(0.65);
+    }
+}
+
+@media (max-width: 600px) {
+    .volatility-content {
+        transform: scale(0.5);
+    }
+}
+

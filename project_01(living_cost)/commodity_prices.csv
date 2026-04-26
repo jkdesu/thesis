@@ -1,0 +1,31 @@
+ID,Item,Tokyo,Price_Local_Yen,JPY/USD,NYC,Price_Local_USD
+1,Subway Sandwhich (Italian B.L.T),Subway_JP,740,$4.72,Subway_US,8.49
+2,McDonald's Big Mac ,McDonald's_JP,480,$3.06,McDonald's_US,6.69
+3,Coca Cola Zero (1 Bottle),CocaCola_JP,180,$1.15,CocaCola_US,2.7
+4,Burger King Whopper,BurgerKing_JP,590,$3.76,BurgerKing_US,7.69
+5,Starbucks Tall Black Coffee,Starbucks_JP,445,$2.84,Starbucks_US,4.63
+6,Starbucks Tall Latte,Starbucks_JP,550,$3.51,Starbucks_US,5.61
+7,Starbucks_Cheesecake,Starbucks_JP,550,$3.51,Starbucks_US,7.6
+8,Domino's Medium Cheese Pizza,Domino's_JP,1180,$7.52,Domino's_US,12.99
+9,TacoBell CrunchWrap,TacoBell_JP,670,$4.27,TacoBell_US,9.02
+10,1 pack of Rice,AEON,1300,$8.29,WholeFoods,21
+11,Evian 500ml Water Bottle,Evian_JP,220,$1.40,Evian_US,2.52
+12,Dozen Eggs,Hokuryo,450,$2.87,WholeFoods,6.3
+13,Salmon,AEON,670,$4.27,WholeFoods,9.99
+14,White Bread Loaf,AEON,200,$1.27,WholeFoods,4.5
+15,1 Banana,AEON,98,$0.62,WholeFoods,2.49
+16,Chicken Breast,AEON,300,$0.04,WholeFoods,11
+17,Beer (Asahi),AEON,500,$3.19,WholeFoods,7
+18,Malboro Gold Cigerettes (pack),7Eleven_JP,600,$3.82,7Eleven_US,21
+19,Red Bull (25ml Can),7Eleven_JP,190,$1.21,7Eleven_US,2.37
+20,Shampoo (Head & Shoulders 250 ml),Don Quijote,1156,$7.37,Target,7.89
+21,Shampoo (Pantene 250ml),Don Quijote,1300,$8.29,Target,6.19
+22,Uniqlo HeatTech,UNIQLO_JP,2990,$19.06,UNIQLO_US,29.9
+23,Uniqlo White T-Shirt,UNIQLO_JP,990,$6.31,UNIQLO_US,14.9
+24,Airpods ,Apple_JP,39800,$253.69,Apple_US,249
+25,iPhone 17 Pro,Apple_JP,"179,800","$1,146.05",Apple_US,1099
+26,Phone Bill ,Rakuten,"2,000",$12.75,AT&T,70
+27,Rent (1 Bedroom),Tokyo APT avg,"170,000","$1,083.58",NYC APT avg,3000
+28,Utility Fee,Utility avg,"15,000",$95.61,Utility avg,200
+29,Transit (Subway Ride),JR,190,$1.21,MetroNYC,2.9
+30,Museum Ticket Price,TeamLab,3800,$24.22,MercerLab,50

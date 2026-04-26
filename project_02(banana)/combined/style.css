@@ -1,0 +1,899 @@
+/* ============================================================
+   BASE — proposal_review aesthetic
+   White background, black 2px borders, Arial, editorial
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #000;
+}
+
+.exhibition-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 44px;
+  background: #000;
+  border-bottom: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  z-index: 2001;
+}
+
+.exhibition-home-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.exhibition-home-link:hover {
+  color: #ff5ad9;
+}
+
+.banana-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 44px 0 0;
+}
+
+.banana-page .banana-content {
+  width: 100vw;
+  max-width: none;
+  height: calc(100vh - 44px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-bottom: 2px solid black;
+  z-index: 999;
+  padding: 15px 0;
+}
+.navbar.hidden { display: none; }
+.nav-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-title { font-size: 20px; margin: 0; }
+.nav-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-button:hover { background: black; color: white; }
+
+/* ============================================================
+   LANDING / INTRO PANEL
+   ============================================================ */
+.intro-panel {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 1000;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.intro-panel.hidden { display: none; }
+
+.intro-content {
+  width: 100%;
+  max-width: 1200px;
+  padding: 60px 40px 80px;
+}
+
+.landing-header {
+  border-bottom: 2px solid black;
+  padding-bottom: 40px;
+  margin-bottom: 48px;
+}
+.landing-header h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: bold;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+.landing-lead {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 800px;
+  color: #333;
+}
+
+/* Entry grid: 2 cards on top, 1 wide card below */
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.entry-card {
+  border: 2px solid black;
+  margin: -1px -1px 0 0; /* collapse borders */
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 280px;
+}
+.entry-card-wide {
+  grid-column: 1 / -1;
+  min-height: auto;
+}
+.entry-card-inner { margin-bottom: 24px; }
+.entry-number {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #999;
+  margin-bottom: 12px;
+}
+.entry-card h2 {
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+.entry-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+}
+.entry-button {
+  align-self: flex-start;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.entry-button:hover { background: black; color: white; }
+
+/* City sim options inside entry card */
+.city-sim-buttons {
+  display: flex;
+  gap: 0;
+  border: 1px solid black;
+  margin-top: 8px;
+}
+.city-sim-option {
+  flex: 1;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.city-sim-divider { width: 1px; background: black; }
+.city-sim-info { display: flex; flex-direction: column; gap: 4px; }
+.city-sim-info strong { font-size: 16px; }
+.city-sim-info span { font-size: 13px; color: #666; }
+.city-button {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-start;
+}
+.city-button:hover { background: black; color: white; }
+
+/* ============================================================
+   SHARED PANEL STYLES (volatility + banana use same shell)
+   ============================================================ */
+.volatility-panel {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 1001;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.volatility-panel.hidden { display: none; }
+
+.volatility-content {
+  max-width: 1100px;
+  width: 100%;
+  padding: 24px 24px 48px;
+  min-height: min-content;
+  text-align: center;
+}
+
+.volatility-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.volatility-title-area { flex: 1; text-align: center; }
+.volatility-title-area h1 {
+  font-size: 38px;
+  margin-bottom: 6px;
+  border-bottom: 2px solid black;
+  padding-bottom: 12px;
+}
+.volatility-subtitle { font-size: 14px; color: #666; }
+
+.back-button-top {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.back-button-top:hover { background: black; color: white; }
+.header-spacer { width: 100px; }
+
+/* ============================================================
+   BANANA PANEL — specific overrides
+   ============================================================ */
+.banana-content { max-width: 900px; }
+
+.banana-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.banana-city-label {
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  min-width: 160px;
+  text-align: center;
+}
+
+/* The contained cinematic viewport */
+.banana-viewport {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 320px;
+  border: 2px solid black;
+  overflow: hidden;
+  background: #0a0a0b;
+}
+
+/* Override fixed positioning: scene, camera, cutout contained in viewport */
+.banana-viewport .scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.banana-viewport .scene img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s ease-out;
+}
+.banana-viewport .scene .tokyo   { z-index: 1; }
+.banana-viewport .scene .manhattan { z-index: 2; }
+
+.banana-viewport .scene.scene-both .tokyo    { opacity: 1; }
+.banana-viewport .scene.scene-both .manhattan { opacity: 0.5; }
+.banana-viewport .scene.scene-tokyo .tokyo    { opacity: 1; }
+.banana-viewport .scene.scene-tokyo .manhattan { opacity: 0; }
+.banana-viewport .scene.scene-manhattan .tokyo    { opacity: 0; }
+.banana-viewport .scene.scene-manhattan .manhattan { opacity: 1; }
+
+/* Collage stickers */
+.banana-viewport .manhattan-collage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.banana-viewport .scene.scene-tokyo .manhattan-collage { opacity: 0; }
+.banana-viewport .scene.scene-both .manhattan-collage,
+.banana-viewport .scene.scene-manhattan .manhattan-collage { opacity: 1; }
+
+.banana-viewport .tokyo-collage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.banana-viewport .scene.scene-manhattan .tokyo-collage { opacity: 0; }
+.banana-viewport .scene.scene-tokyo .tokyo-collage,
+.banana-viewport .scene.scene-both .tokyo-collage { opacity: 1; }
+
+.banana-viewport .tokyo-collage .collage-sticker {
+  position: absolute;
+  opacity: 0.75;
+  width: clamp(200px, 50vw, 520px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.5);
+}
+.banana-viewport .tokyo-collage .tokyo-sticker-10   { top: 20%; left: 15%; transform: rotate(-6deg); }
+.banana-viewport .tokyo-collage .tokyo-sticker-100  { top: 55%; right: 15%; left: auto; transform: rotate(5deg); z-index: 10; opacity: 0.3; }
+.banana-viewport .tokyo-collage .tokyo-sticker-1111 { inset: 0; width: 100%; height: 100%; object-fit: cover; transform: none; z-index: 100; opacity: 0.3; }
+.banana-viewport .tokyo-collage .tokyo-sticker-1000 { bottom: 25%; left: 20%; top: auto; transform: rotate(-4deg); opacity: 0.7; }
+.banana-viewport .tokyo-collage .tokyo-sticker-1    { top: 10%; right: 20%; left: auto; transform: rotate(8deg); width: clamp(280px, 70vw, 700px); opacity: 0.3; }
+.banana-viewport .tokyo-collage .tokyo-sticker-2    { top: 45%; left: 8%; transform: rotate(-7deg); width: clamp(280px, 70vw, 700px); opacity: 0.3; }
+.banana-viewport .tokyo-collage .tokyo-sticker-3    { bottom: 15%; right: 25%; top: auto; left: auto; transform: rotate(4deg); width: clamp(280px, 70vw, 700px); opacity: 0.3; }
+
+.banana-viewport .collage-sticker {
+  position: absolute;
+  opacity: 0.3;
+  width: clamp(35px, 4vw, 65px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.banana-viewport .collage-sticker.mh01 { top: 18%; left: 12%; transform: rotate(-8deg); }
+.banana-viewport .collage-sticker.mh02 { top: 62%; right: 18%; left: auto; transform: rotate(6deg); }
+.banana-viewport .collage-sticker.mh03 { bottom: 22%; left: 8%; top: auto; transform: rotate(-4deg); }
+.banana-viewport .collage-sticker.sticker-1111 { top: 35%; right: 12%; left: auto; opacity: 0.5; transform: rotate(5deg); }
+.banana-viewport .collage-sticker.sticker-tiff { bottom: 35%; left: 15%; top: auto; opacity: 0.7; transform: rotate(-6deg); }
+
+/* Camera layer */
+.banana-viewport .camera-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.banana-viewport .camera-layer video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Banana cutout + poem */
+.banana-viewport .banana-cutout-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.banana-viewport .banana-cutout-layer canvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  position: absolute;
+  inset: 0;
+}
+.banana-viewport .poem-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  padding: 24px 32px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 7;
+}
+.banana-viewport .poem-frame.visible { display: flex; }
+.banana-viewport .poem-text {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: clamp(24px, 4vw, 52px);
+  line-height: 1.3;
+  transition: font-size 0.2s ease-out;
+  max-width: 95%;
+  text-align: center;
+  color: white;
+  text-shadow:
+    -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black,
+    0 -2px 0 black, 0 2px 0 black, -2px 0 0 black, 2px 0 0 black;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================================
+   MARQUEE STACK — sits below the viewport
+   ============================================================ */
+.marquee-stack {
+  border: 2px solid black;
+  border-top: none;
+  overflow: hidden;
+}
+.marquee-bar {
+  height: 36px;
+  background: black;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #333;
+}
+.marquee-bar:first-child { border-top: none; }
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+}
+.marquee-speed-1 { animation: marqueeScroll 18s linear infinite; }
+.marquee-speed-2 { animation: marqueeScroll 32s linear infinite reverse; }
+.marquee-speed-3 { animation: marqueeScroll 48s linear infinite; }
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   PRICE VOLATILITY PANEL — carried over from proposal_review
+   ============================================================ */
+.volatility-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+  justify-content: center;
+}
+#volatility-progress { font-size: 16px; font-weight: bold; min-width: 60px; }
+.volatility-progress-track {
+  width: 250px;
+  height: 6px;
+  background: #ddd;
+  border: 1px solid black;
+  overflow: hidden;
+}
+.volatility-progress-fill { height: 100%; background: black; transition: width 0.3s ease; }
+.volatility-item-title { font-size: 28px; margin-bottom: 15px; font-weight: bold; }
+
+.volatility-main-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 50px;
+  margin: 0 auto 10px;
+  max-width: 950px;
+}
+.volatility-left, .volatility-right { width: 420px; height: 480px; }
+.volatility-right { display: flex; align-items: stretch; }
+.volatility-single-display { width: 420px; }
+
+.volatility-card {
+  border: 2px solid black;
+  padding: 25px;
+  width: 420px;
+  height: 440px;
+  box-sizing: border-box;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+.volatility-card.animate-in { opacity: 1; }
+.volatility-card.fade-out   { opacity: 0; }
+
+.volatility-img-container {
+  position: relative;
+  width: 370px;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+.volatility-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.volatility-price-tag { text-align: center; height: 90px; display: flex; flex-direction: column; justify-content: center; }
+.volatility-price-main { font-size: 42px; font-weight: bold; }
+.volatility-price-sub  { font-size: 18px; color: #666; margin-top: 5px; height: 24px; }
+.volatility-city-indicator { margin-top: 10px; font-size: 12px; color: #666; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+
+.volatility-difference {
+  border: 2px solid black;
+  padding: 12px 25px;
+  margin: 0 auto 10px;
+  width: 450px;
+  height: 70px;
+  background: #f0f0f0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.volatility-difference.hidden { visibility: hidden; }
+.volatility-diff-text    { display: block; font-size: 14px; font-weight: bold; margin-bottom: 3px; }
+.volatility-diff-percent { display: block; font-size: 18px; font-weight: bold; }
+
+.volatility-controls { display: flex; justify-content: center; gap: 12px; margin-bottom: 15px; }
+.volatility-nav-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.volatility-nav-btn:hover { background: black; color: white; }
+.volatility-play-btn {
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.volatility-play-btn:hover { background: black; color: white; }
+.volatility-play-btn.playing { background: black; color: white; }
+
+.volatility-dots { display: flex; justify-content: center; flex-wrap: nowrap; gap: 8px; margin-bottom: 15px; }
+.volatility-dot {
+  width: 14px; height: 14px; min-width: 14px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  padding: 0;
+}
+.volatility-dot:hover { background: #ddd; }
+.volatility-dot.active { background: black; }
+
+.expression-graph-container { margin: 15px auto 0; padding: 15px; border: 2px solid black; max-width: 650px; }
+.expression-graph-container h4 { margin: 0 0 10px; font-size: 14px; text-align: center; }
+#expression-graph { width: 100%; height: 120px; background: #f9f9f9; border: 1px solid #ddd; display: block; }
+
+/* Face tracking */
+.reaction-tracker {
+  border: 2px solid black;
+  padding: 25px;
+  width: 420px;
+  height: 440px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.reaction-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
+.reaction-header h3 { margin: 0; font-size: 18px; }
+.tracking-status-container { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+.tracking-status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; }
+.tracking-status-dot.active  { background: #44aa44; }
+.tracking-status-dot.warning { background: #ffaa00; }
+.tracking-status-dot.error   { background: #ff4444; }
+.webcam-container { position: relative; width: 260px; height: 195px; margin: 0 auto 20px; border: 1px solid #ddd; background: #f5f5f5; overflow: hidden; }
+#webcam-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+.webcam-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #f5f5f5; color: #999; font-size: 12px; }
+.webcam-overlay.hidden { display: none; }
+.reaction-meters { margin-bottom: 8px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.reaction-meter { margin-bottom: 12px; }
+.reaction-meter label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; text-align: left; }
+.reaction-bar-track { width: 100%; height: 16px; background: #f0f0f0; border: 1px solid black; }
+.reaction-bar-fill { height: 100%; width: 0%; background: #44aa44; transition: width 0.1s ease; }
+.reaction-value { font-size: 20px; font-weight: bold; margin-top: 5px; }
+.reaction-value.peak { font-size: 18px; color: #666; }
+.toggle-tracking-btn { padding: 10px 20px; font-size: 14px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; transition: all 0.2s; }
+.toggle-tracking-btn:hover { background: black; color: white; }
+
+/* ============================================================
+   CITY SIMULATOR
+   ============================================================ */
+.container { display: flex; width: 100%; height: 100vh; }
+.container.with-nav { padding-top: 70px; height: calc(100vh - 70px); }
+.container.single-city .city-section { width: 100%; }
+.container.single-city .city-section.hidden { display: none; }
+
+.city-section { width: 50%; overflow-y: auto; display: flex; flex-direction: column; }
+.city-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 2px solid black; min-height: 80px; }
+.city-header h1 { font-size: 32px; margin: 0; flex: 1; text-align: left; }
+.nyc .city-header h1 { text-align: center; }
+.container.single-city .nyc .city-header h1 { text-align: center; }
+.tokyo { border-right: 2px solid black; }
+
+.currency-toggle { padding: 10px 20px; font-size: 14px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; transition: all 0.2s; }
+.currency-toggle:hover { background: black; color: white; }
+
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0; }
+.item-card { border: 1px solid black; cursor: pointer; transition: opacity 0.2s; display: flex; flex-direction: column; }
+.item-card:hover { opacity: 0.7; }
+.item-card.selected { background: #f0f0f0; border: 3px solid black; }
+.item-card img { width: 100%; height: auto; display: block; }
+.item-info { padding: 10px; text-align: center; }
+.item-number { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
+.item-name { font-size: 12px; margin-bottom: 5px; min-height: 30px; }
+.item-price { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+.quantity-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
+.quantity-btn { width: 30px; height: 30px; font-size: 18px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; transition: all 0.2s; }
+.quantity-btn:hover { background: black; color: white; }
+.quantity-display { font-size: 18px; font-weight: bold; min-width: 30px; text-align: center; }
+
+.budget-calculator { padding: 20px; border-bottom: 2px solid black; background: white; position: sticky; top: 0; z-index: 10; }
+.budget-calculator.hidden { display: none; }
+.container.with-nav .budget-calculator { top: 70px; }
+.day-counter { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 20px; padding: 10px; border: 2px solid black; }
+.budget-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; }
+.budget-row.expense .amount { font-weight: bold; }
+.budget-row.remaining { font-size: 20px; font-weight: bold; padding: 15px 0 5px; }
+.budget-row .amount { font-family: monospace; font-size: 18px; }
+.budget-calculator hr { margin: 15px 0; border: none; border-top: 2px solid black; }
+.items-list { margin: 10px 0; padding: 10px; background: #f5f5f5; border: 1px solid black; max-height: 200px; overflow-y: auto; }
+.items-list:empty { display: none; }
+.item-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 14px; border-bottom: 1px solid #ddd; }
+.item-row:last-child { border-bottom: none; }
+.item-name-small { flex: 1; text-align: left; }
+.item-price-small { font-family: monospace; font-weight: bold; }
+.submit-day-button { width: 100%; padding: 15px; margin-top: 15px; font-size: 18px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; transition: all 0.2s; }
+.submit-day-button:hover { background: black; color: white; }
+
+/* ============================================================
+   SUPPLY CHAIN OVERLAY
+   ============================================================ */
+
+/* Sits inside .volatility-img-container, covers the product image */
+.sc-overlay {
+  position: absolute;
+  inset: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+
+.sc-header {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.18em;
+  color: #999;
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+  border-bottom: 2px solid black;
+}
+
+.sc-rows {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+/* Each step row — slides in from left */
+.sc-row {
+  display: flex;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid #ebebeb;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.sc-row.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sc-col-label {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  min-width: 90px;
+  color: black;
+}
+.sc-col-note {
+  flex: 1;
+  font-size: 10px;
+  color: #aaa;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-col-price {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: black;
+  min-width: 52px;
+  text-align: right;
+}
+
+/* Total row — appears after all steps */
+.sc-total-row {
+  display: flex;
+  align-items: baseline;
+  padding: 8px 0 2px;
+  border-top: 2px solid black;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sc-total-row.visible { opacity: 1; }
+.sc-total-row .sc-col-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.sc-total-row .sc-col-price {
+  font-size: 16px;
+}
+
+/* ============================================================
+   SUPPLY CHAIN STATIC PANEL (replaces face tracking)
+   ============================================================ */
+.sc-panel {
+  border: 2px solid black;
+  padding: 20px;
+  width: 420px;
+  height: 440px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: Arial, sans-serif;
+}
+.sc-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid black;
+}
+.sc-panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sc-panel-city {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.18em;
+  color: #666;
+}
+.sc-panel-rows {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-evenly;
+}
+.sc-p-row {
+  display: flex;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+.sc-p-label {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  min-width: 100px;
+  color: black;
+}
+.sc-p-note {
+  flex: 1;
+  font-size: 10px;
+  color: #aaa;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-p-price {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: black;
+  min-width: 55px;
+  text-align: right;
+}
+.sc-panel-total {
+  display: flex;
+  align-items: baseline;
+  padding: 10px 0 6px;
+  border-top: 2px solid black;
+  margin-top: 4px;
+}
+.sc-panel-total .sc-p-label {
+  font-size: 11px;
+}
+.sc-panel-total .sc-p-price {
+  font-size: 16px;
+}
+.sc-panel-bar {
+  display: flex;
+  height: 22px;
+  margin: 12px 0 8px;
+  border: 1px solid black;
+  overflow: hidden;
+}
+.sc-bar-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+.sc-bar-seg-0 { background: #111; }
+.sc-bar-seg-1 { background: #555; }
+.sc-bar-seg-2 { background: #999; }
+.sc-bar-seg-3 { background: #ccc; }
+.sc-bar-pct {
+  font-size: 9px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+.sc-bar-seg-3 .sc-bar-pct { color: #333; }
+.sc-panel-note {
+  font-size: 10px;
+  color: #aaa;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .entry-grid { grid-template-columns: 1fr; }
+  .entry-card-wide { grid-column: 1; }
+  .city-sim-buttons { flex-direction: column; }
+  .city-sim-divider { height: 1px; width: auto; }
+  .volatility-main-area { flex-direction: column; align-items: center; gap: 20px; }
+  .volatility-left, .volatility-right { width: 100%; max-width: 420px; height: auto; }
+  .volatility-card, .reaction-tracker, .sc-panel { width: 100%; max-width: 420px; }
+  .volatility-single-display { width: 100%; max-width: 420px; }
+  .banana-viewport { height: 300px; }
+}
+@media (max-width: 600px) {
+  .intro-content { padding: 32px 20px 60px; }
+  .landing-header h1 { font-size: 28px; }
+  .volatility-content { padding: 16px 12px 40px; }
+  .volatility-title-area h1 { font-size: 26px; }
+  .banana-viewport { height: 240px; }
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Build Your Sandwich</title>
+    <link rel="stylesheet" href="style.css?v=37" />
+  </head>
+  <body>
+    <div class="exhibition-topbar">
+      <a class="exhibition-home-link" href="../index.html">← Back to Exhibition</a>
+    </div>
+
+    <header class="site-header no-print">
+      <h1 class="site-title">Build Your Sandwich</h1>
+      <nav class="journey-map" id="journeyMap" aria-label="Activity steps">
+        <ol class="journey-map__list">
+          <li class="journey-map__item" data-step="0">
+            <span class="journey-map__dot" aria-hidden="true"></span>
+            <span class="journey-map__label">Mood now</span>
+          </li>
+          <li class="journey-map__item" data-step="1">
+            <span class="journey-map__line" aria-hidden="true"></span>
+            <span class="journey-map__dot" aria-hidden="true"></span>
+            <span class="journey-map__label">Image mood</span>
+          </li>
+          <li class="journey-map__item" data-step="2">
+            <span class="journey-map__line" aria-hidden="true"></span>
+            <span class="journey-map__dot" aria-hidden="true"></span>
+            <span class="journey-map__label">Build</span>
+          </li>
+          <li class="journey-map__item" data-step="3">
+            <span class="journey-map__line" aria-hidden="true"></span>
+            <span class="journey-map__dot" aria-hidden="true"></span>
+            <span class="journey-map__label">Build mood</span>
+          </li>
+          <li class="journey-map__item" data-step="4">
+            <span class="journey-map__line" aria-hidden="true"></span>
+            <span class="journey-map__dot" aria-hidden="true"></span>
+            <span class="journey-map__label">Receipt</span>
+          </li>
+        </ol>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="btn-ghost" id="btnReset">Start over</button>
+      </div>
+    </header>
+
+    <main class="app-main" id="appMain">
+      <section class="flow-step flow-step--active" id="step0" data-step="0" aria-labelledby="step0Title">
+        <h2 class="flow-step__title" id="step0Title">How do you identify your mood right now?</h2>
+        <p class="flow-banner" id="doneBanner" role="status" hidden>Round complete. You can start again with another line.</p>
+        <p class="flow-step__lead" id="step0Lead">Choose one mood from the index to start your emotional path.</p>
+        <div class="mood-grid mood-grid--feel" id="moodGrid" role="group" aria-label="Mood index, choose one feeling"></div>
+        <p class="flow-error" id="moodLoadError" hidden></p>
+        <div class="flow-actions">
+          <button type="button" class="btn-primary" id="btnToNextFromMood0" disabled>Next section →</button>
+        </div>
+      </section>
+
+      <section class="flow-step" id="step1" data-step="1" aria-labelledby="step1Title" hidden>
+        <h2 class="flow-step__title" id="step1Title">How do you feel when you are looking at the sandwich?</h2>
+        <p class="flow-step__context" id="step1Context" aria-live="polite"></p>
+        <section class="sandwich-image-wall" aria-label="Sandwich references">
+          <figure class="sandwich-image-card">
+            <img src="sandwich_jpeg/sandwich1.jpeg" alt="Sandwich reference image 1" loading="lazy" />
+          </figure>
+          <figure class="sandwich-image-card">
+            <img src="sandwich_jpeg/sandwich2.jpeg" alt="Sandwich reference image 2" loading="lazy" />
+          </figure>
+          <figure class="sandwich-image-card">
+            <img src="sandwich_jpeg/sandwich3.jpeg" alt="Sandwich reference image 3" loading="lazy" />
+          </figure>
+        </section>
+        <p class="flow-step__sub" id="step1Sub">Use the same mood index and select one feeling.</p>
+        <div class="mood-grid mood-grid--feel" id="checkinMoodGrid" role="group" aria-label="How you feel right now, pick one"></div>
+        <div class="flow-actions">
+          <button type="button" class="btn-ghost" id="btnBack1">Back</button>
+          <button type="button" class="btn-primary" id="btnToBuild" disabled>Build your sandwich →</button>
+        </div>
+      </section>
+
+      <section class="flow-step flow-step--build" id="step2" data-step="2" aria-labelledby="step2Title" hidden>
+        <h2 class="flow-step__title flow-step__title--inline" id="step2Title">Try to build your sandwich</h2>
+        <p class="flow-step__lead flow-step__lead--tight" id="step2Lead">Add what you like; then go to the receipt when you are ready.</p>
+        <div class="flow-actions flow-actions--after-build">
+          <button type="button" class="btn-ghost" id="btnBack2">Back</button>
+          <button type="button" class="btn-primary" id="btnToReceipt">See your sandwich &amp; receipt →</button>
+        </div>
+        <div class="layout">
+          <section class="plate-section" aria-label="Plate preview">
+            <div class="section-heading-row">
+              <h3 class="section-heading">On your plate</h3>
+              <div class="plate-controls">
+                <button type="button" class="btn-ghost btn-plate-control" id="btnClearPlate">Clear plate</button>
+                <button type="button" class="btn-ghost btn-plate-control" id="btnClearLast">Clear most recent topping</button>
+              </div>
+            </div>
+            <div class="plate-wrap">
+              <div class="plate-stack" id="plateStack">
+                <img
+                  class="layer plate"
+                  src="plate/plate.png"
+                  width="600"
+                  height="400"
+                  alt=""
+                />
+              </div>
+            </div>
+            <p class="plate-hint" id="emptyHint">
+              Add layers from bottom to top. Each ingredient shows as a clear band; older layers sit lower, newest
+              on top.
+            </p>
+          </section>
+          <section class="bodega-section" id="bodegaRoot" aria-label="Ingredients"></section>
+        </div>
+      </section>
+
+      <section class="flow-step flow-step--receipt" id="step3" data-step="3" aria-labelledby="step3Title" hidden>
+        <h2 class="flow-step__title" id="step3Title">Now look at your sandwich and identify your mood</h2>
+        <p class="flow-step__context" id="step3Context" aria-live="polite">
+          <strong>Left</strong> — your sandwich at full size. <strong>Right</strong> — select one mood from the same index.
+        </p>
+
+        <div class="receipt-flow no-print">
+          <div class="receipt-sandwich-block" aria-label="Your sandwich build">
+            <h3 class="receipt-sandwich-label">Your sandwich</h3>
+            <div class="receipt-sandwich-frame">
+              <div class="plate-wrap plate-wrap--receipt">
+                <div class="plate-stack plate-stack--receipt" id="receiptPlateStack" aria-label="Your constructed sandwich on the plate">
+                  <img class="layer plate" src="plate/plate.png" width="600" height="400" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="receipt-mood-block">
+            <h3 class="receipt-mood-question" id="afterMoodLabel">How do you feel now that you built it?</h3>
+            <div class="mood-grid mood-grid--feel" id="afterMoodGrid" role="group" aria-label="Mood after seeing the sandwich, pick one"></div>
+            <div class="flow-actions flow-actions--tight">
+              <button type="button" class="btn-ghost" id="btnBack3">Back</button>
+              <button type="button" class="btn-primary" id="btnToFinalReceipt" disabled>View emotional volatility receipt →</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="flow-step" id="step4" data-step="4" aria-labelledby="step4Title" hidden>
+        <h2 class="flow-step__title" id="step4Title">Emotional Volatility Receipt</h2>
+        <p class="flow-step__context">Review your path and open a printable receipt window if needed.</p>
+        <div class="receipt-stage-grid">
+          <section class="activity-grid-panel">
+            <h3 class="receipt-side-title">Captured every second</h3>
+            <div class="activity-photo-grid" id="activityPhotoGrid" aria-live="polite"></div>
+          </section>
+          <article class="receipt-panel" id="receiptPanel" aria-live="polite"></article>
+          <section class="time-taken-panel">
+            <h3 class="receipt-side-title">Time taken in completion</h3>
+            <p class="time-taken-value" id="timeTakenValue">--:--</p>
+            <p class="time-taken-sub" id="timeTakenSub">The timer starts at first mood selection and ends at receipt view.</p>
+          </section>
+        </div>
+        <div class="flow-actions">
+          <button type="button" class="btn-ghost" id="btnBack4">Back</button>
+          <button type="button" class="btn-primary" id="btnPrintReceipt" aria-label="Open emotional volatility receipt in a new window to read or print">Open receipt in new window</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js?v=36"></script>
+  </body>
+</html>

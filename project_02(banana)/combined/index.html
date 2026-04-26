@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banana Poem Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="exhibition-topbar">
+    <a class="exhibition-home-link" href="../../index.html">← Back to Exhibition</a>
+  </div>
+
+  <main class="banana-page">
+    <div class="volatility-content banana-content">
+      <div class="volatility-header">
+        <div class="header-spacer"></div>
+        <div class="volatility-title-area">
+          <h1>Banana Poem Generator</h1>
+          <p class="volatility-subtitle">Hold a banana to your camera - a poem will appear</p>
+        </div>
+        <div class="header-spacer"></div>
+      </div>
+
+      <div class="banana-controls">
+        <button class="volatility-nav-btn" onclick="setScene('tokyo')">← Tokyo</button>
+        <span id="banana-city-label" class="banana-city-label">Tokyo + Manhattan</span>
+        <button class="volatility-nav-btn" onclick="setScene('both')">Both</button>
+        <button class="volatility-nav-btn" onclick="setScene('manhattan')">Manhattan →</button>
+      </div>
+
+      <div class="banana-viewport">
+        <div class="scene scene-both">
+          <img class="tokyo" id="tokyoImg" src="../banana_images/tokyo.png" alt="Tokyo">
+          <div class="tokyo-collage">
+            <img class="collage-sticker tokyo-sticker-10" src="../banana_images/10.png" alt="">
+            <img class="collage-sticker tokyo-sticker-100" src="../banana_images/100.png" alt="">
+            <img class="collage-sticker tokyo-sticker-1000" src="../banana_images/1000.png" alt="">
+            <img class="collage-sticker tokyo-sticker-1" src="../banana_images/tokyo1.png" alt="">
+            <img class="collage-sticker tokyo-sticker-2" src="../banana_images/tokyo2.png" alt="">
+            <img class="collage-sticker tokyo-sticker-3" src="../banana_images/tokyo3.png" alt="">
+            <img class="collage-sticker tokyo-sticker-1111" src="../banana_images/1111.png" alt="">
+          </div>
+          <img class="manhattan" id="manhattanImg" src="../banana_images/manahttan.jpg" alt="Manhattan">
+          <div class="manhattan-collage">
+            <img class="collage-sticker mh01" src="../banana_images/mh01.png" alt="">
+            <img class="collage-sticker mh02" src="../banana_images/mh02.png" alt="">
+            <img class="collage-sticker mh03" src="../banana_images/mh03.png" alt="">
+            <img class="collage-sticker sticker-1111" src="../banana_images/1111.png" alt="">
+            <img class="collage-sticker sticker-tiff" src="../banana_images/tiff.png" alt="">
+          </div>
+        </div>
+
+        <div class="camera-layer">
+          <video id="video" playsinline></video>
+        </div>
+
+        <div class="banana-cutout-layer">
+          <canvas id="bananaCanvas"></canvas>
+          <div class="poem-frame" id="poemFrame">
+            <p class="poem-text" id="poemText"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="marquee-stack">
+        <div class="marquee-bar marquee-bar-1">
+          <div class="marquee-track marquee-speed-1" data-track="1"></div>
+        </div>
+        <div class="marquee-bar marquee-bar-2">
+          <div class="marquee-track marquee-speed-2" data-track="2"></div>
+        </div>
+        <div class="marquee-bar marquee-bar-3">
+          <div class="marquee-track marquee-speed-3" data-track="3"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="main.js" defer></script>
+</body>
+</html>

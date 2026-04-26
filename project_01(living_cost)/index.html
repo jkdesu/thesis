@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="exhibition-topbar">
+        <a class="exhibition-home-link" href="../index.html">← Back to Exhibition</a>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="navbar hidden">
+        <div class="nav-content">
+            <h1 class="nav-title">City Simulator</h1>
+            <button class="nav-button" onclick="returnToLanding()">← Back to Start</button>
+        </div>
+    </nav>
+
+    <!-- Price Volatility Panel -->
+    <div id="volatility-panel" class="volatility-panel hidden">
+        <div class="volatility-content">
+            <div class="volatility-header">
+                <button class="back-button-top" onclick="closeVolatility()">← Back</button>
+                <div class="volatility-title-area">
+                    <h1>Price Volatility Simulator</h1>
+                    <p class="volatility-subtitle">See how prices differ for the same items</p>
+                </div>
+                <div class="header-spacer"></div>
+            </div>
+            
+            <div class="volatility-progress-container">
+                <span id="volatility-progress">1 / 30</span>
+                <div class="volatility-progress-track">
+                    <div id="volatility-progress-bar" class="volatility-progress-fill"></div>
+                </div>
+            </div>
+            
+            <h2 id="volatility-item-name" class="volatility-item-title">Loading...</h2>
+            
+            <!-- Main Content Area - Side by Side -->
+            <div class="volatility-main-area">
+                <!-- Left: Commodity Display -->
+                <div class="volatility-left">
+                    <div class="volatility-single-display">
+                        <div id="volatility-card" class="volatility-card">
+                            <div class="volatility-img-container">
+                                <img id="volatility-img" src="" alt="Item">
+                            </div>
+                            <div class="volatility-price-tag">
+                                <span id="volatility-price" class="volatility-price-main">¥0</span>
+                                <span id="volatility-price-converted" class="volatility-price-sub"></span>
+                            </div>
+                        </div>
+                        
+                        <div id="volatility-city-indicator" class="volatility-city-indicator">Tokyo</div>
+                    </div>
+                </div>
+                
+                <!-- Right: Face Tracking -->
+                <div class="volatility-right">
+                    <div class="reaction-tracker">
+                        <div class="reaction-header">
+                            <h3>Your Reaction</h3>
+                            <div class="tracking-status-container">
+                                <span id="tracking-status-dot" class="tracking-status-dot"></span>
+                                <span id="tracking-status">Click to enable</span>
+                            </div>
+                        </div>
+                        
+                        <div class="webcam-container">
+                            <video id="webcam-feed" autoplay playsinline muted></video>
+                            <div id="webcam-overlay" class="webcam-overlay">
+                                <span>Camera off</span>
+                            </div>
+                        </div>
+                        
+                        <div class="reaction-meters">
+                            <div class="reaction-meter">
+                                <label>Expression Change Rate</label>
+                                <div class="reaction-bar-track">
+                                    <div id="reaction-intensity-bar" class="reaction-bar-fill"></div>
+                                </div>
+                                <span id="reaction-intensity-value" class="reaction-value">0.0%</span>
+                            </div>
+                            
+                            <div class="reaction-meter">
+                                <label>Peak Reaction</label>
+                                <span id="reaction-peak-value" class="reaction-value peak">0.0%</span>
+                            </div>
+                        </div>
+                        
+                        <button id="toggle-tracking-btn" class="toggle-tracking-btn" onclick="toggleFaceTracking()">
+                            Enable Face Tracking
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Price Difference - Below main area -->
+            <div id="volatility-difference" class="volatility-difference hidden">
+                <span id="volatility-diff-value" class="volatility-diff-text"></span>
+                <span id="volatility-diff-percent" class="volatility-diff-percent"></span>
+            </div>
+            
+            <div class="volatility-controls">
+                <button class="volatility-nav-btn" onclick="prevItem()">← Prev</button>
+                <button id="volatility-play-btn" class="volatility-play-btn" onclick="togglePlayPause()">▶ Play</button>
+                <button class="volatility-nav-btn" onclick="nextItem()">Next →</button>
+            </div>
+            
+            <div id="volatility-dots" class="volatility-dots"></div>
+            
+            <!-- Expression Graph -->
+            <div class="expression-graph-container">
+                <h4>Expression Change Over Time</h4>
+                <canvas id="expression-graph" width="600" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Intro Panel -->
+    <div id="intro-panel" class="intro-panel">
+        <div class="intro-content">
+            <h1>City Simulator</h1>
+            
+            <div class="intro-text">
+                <p>The monthly budget is based on the assumption that you are educated and be able to find a job with a median income.</p>
+                <p><strong>Your goal is to make daily choices, buy what you need, and see how long your budget lasts.</strong></p>
+            </div>
+
+            <div class="survey-button-section">
+                <h2>See how prices differ between Tokyo and NYC</h2>
+                <button class="survey-button" onclick="openVolatility()">Explore Price Volatility</button>
+            </div>
+
+            <div class="compare-section">
+                <h2>First take a look at the commodity prices in Both Cities!</h2>
+                <button class="compare-button" onclick="selectCity('both')">Compare Both Cities</button>
+            </div>
+
+            <div class="city-options">
+                <div class="city-option">
+                    <h2>Tokyo</h2>
+                    <div class="city-description">
+                        <p>Your gross monthly income is <strong>¥471,000</strong>.</p>
+                        <p>After tax, your take-home pay is <strong>¥386,200</strong>.</p>
+                        <p>This is your budget for one month in Tokyo.</p>
+                    </div>
+                    <button class="city-button" onclick="selectCity('tokyo')">Choose Tokyo</button>
+                </div>
+
+                <div class="city-option">
+                    <h2>New York City</h2>
+                    <div class="city-description">
+                        <p>Your gross monthly income is <strong>$6,643 USD</strong>.</p>
+                        <p>After tax, your take-home pay is <strong>$5,447</strong>.</p>
+                        <p>This is your budget for one month in NYC.</p>
+                    </div>
+                    <button class="city-button" onclick="selectCity('nyc')">Choose NYC</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Tokyo Side -->
+        <div class="city-section tokyo">
+            <div class="city-header">
+                <h1>TOKYO</h1>
+                <button class="currency-toggle" id="tokyo-currency-toggle" onclick="toggleTokyoCurrency()">
+                    Show prices in USD
+                </button>
+            </div>
+            
+            <!-- Live Budget Calculator -->
+            <div class="budget-calculator">
+                <div class="day-counter">Day <span id="tokyo-day">1</span>/30</div>
+                <div class="budget-row">
+                    <span>Starting Budget:</span>
+                    <span class="amount"><span id="tokyo-starting-symbol">¥</span><span id="tokyo-starting">201,200</span></span>
+                </div>
+                <div class="budget-row expense">
+                    <span>Items Purchased Today:</span>
+                    <span class="amount">-<span id="tokyo-total-symbol">¥</span><span id="tokyo-total">0</span></span>
+                </div>
+                <div id="tokyo-items-list" class="items-list"></div>
+                <hr>
+                <div class="budget-row remaining">
+                    <span>Remaining Budget:</span>
+                    <span class="amount"><span id="tokyo-remaining-symbol">¥</span><span id="tokyo-remaining">201,200</span></span>
+                </div>
+                <button class="submit-day-button" onclick="submitDay('tokyo')">End Day & Continue →</button>
+            </div>
+
+            <div id="tokyo-items" class="items-grid"></div>
+        </div>
+
+        <!-- NYC Side -->
+        <div class="city-section nyc">
+            <div class="city-header">
+                <h1>NYC</h1>
+            </div>
+            
+            <!-- Live Budget Calculator -->
+            <div class="budget-calculator">
+                <div class="day-counter">Day <span id="nyc-day">1</span>/30</div>
+                <div class="budget-row">
+                    <span>Starting Budget:</span>
+                    <span class="amount">$<span id="nyc-starting">2,247.00</span></span>
+                </div>
+                <div class="budget-row expense">
+                    <span>Items Purchased Today:</span>
+                    <span class="amount">-$<span id="nyc-total">0.00</span></span>
+                </div>
+                <div id="nyc-items-list" class="items-list"></div>
+                <hr>
+                <div class="budget-row remaining">
+                    <span>Remaining Budget:</span>
+                    <span class="amount">$<span id="nyc-remaining">2,247.00</span></span>
+                </div>
+                <button class="submit-day-button" onclick="submitDay('nyc')">End Day & Continue →</button>
+            </div>
+
+            <div id="nyc-items" class="items-grid"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript files - load in order of dependencies -->
+    <script src="interaction/data.js"></script>
+    <script src="interaction/state.js"></script>
+    <script src="interaction/currency.js"></script>
+    <script src="interaction/facetracking.js"></script>
+    <script src="interaction/volatility.js"></script>
+    <script src="interaction/items.js"></script>
+    <script src="interaction/budget.js"></script>
+    <script src="interaction/navigation.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+
