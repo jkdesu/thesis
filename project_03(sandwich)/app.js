@@ -138,6 +138,8 @@
   let activityStartedAt = 0;
   let activityEndedAt = 0;
   let firstCaptureInProgress = false;
+  const faceDetectionPreviewCache = new Map();
+  let faceDetectionRenderToken = 0;
 
   const plateStack = document.getElementById("plateStack");
   const receiptPlateStack = document.getElementById("receiptPlateStack");
@@ -162,6 +164,7 @@
   const activityPhotoGrid = document.getElementById("activityPhotoGrid");
   const timeTakenValue = document.getElementById("timeTakenValue");
   const timeTakenSub = document.getElementById("timeTakenSub");
+  const faceDetectionGrid = document.getElementById("faceDetectionGrid");
   const btnClearPlate = document.getElementById("btnClearPlate");
   const btnClearLast = document.getElementById("btnClearLast");
   const btnToNextFromMood0 = document.getElementById("btnToNextFromMood0");
@@ -324,20 +327,14 @@
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
 
-  const DISPLAY_GRID_SLOTS = 24;
+  const DISPLAY_GRID_SLOTS = 56;
+  const FACE_DETECTION_SLOTS = 12;
 
   function getSamplesForDisplayGrid() {
     const s = activityPhotoSamples;
-    if (s.length === 0) return [];
-    if (s.length === 1) return [{ sample: s[0], label: 1 }];
-    if (s.length <= DISPLAY_GRID_SLOTS) {
-      return s.map((sample, idx) => ({ sample, label: idx + 1 }));
-    }
     const out = [];
-    const last = s.length - 1;
     for (let i = 0; i < DISPLAY_GRID_SLOTS; i++) {
-      const j = Math.round((i * last) / (DISPLAY_GRID_SLOTS - 1));
-      out.push({ sample: s[j], label: i + 1 });
+      out.push({ sample: s[i] || null, label: i + 1 });
     }
     return out;
   }
@@ -346,17 +343,15 @@
     if (!activityPhotoGrid) return;
     activityPhotoGrid.textContent = "";
     const displayRows = getSamplesForDisplayGrid();
-    if (displayRows.length === 0) {
-      const empty = document.createElement("p");
-      empty.className = "activity-grid-empty";
-      empty.textContent = "No timeline photos captured yet.";
-      activityPhotoGrid.appendChild(empty);
-      return;
-    }
     displayRows.forEach(({ sample, label }) => {
       const fig = document.createElement("figure");
-      fig.className = "activity-grid-shot";
-      fig.innerHTML = `<img src="${escapeHtml(sample.src)}" alt="Activity snapshot ${label}" loading="lazy" /><figcaption>#${label}</figcaption>`;
+      if (sample && sample.src) {
+        fig.className = "activity-grid-shot";
+        fig.innerHTML = `<img src="${escapeHtml(sample.src)}" alt="Activity snapshot ${label}" loading="lazy" /><figcaption>#${label}</figcaption>`;
+      } else {
+        fig.className = "activity-grid-shot activity-grid-shot--empty";
+        fig.innerHTML = `<div class="activity-grid-shot__placeholder" aria-hidden="true"></div><figcaption>#${label}</figcaption>`;
+      }
       activityPhotoGrid.appendChild(fig);
     });
   }
@@ -369,6 +364,162 @@
     timeTakenValue.textContent = formatDuration(duration);
     if (timeTakenSub) {
       timeTakenSub.textContent = `Started at ${new Date(start).toLocaleTimeString()} and ended at ${new Date(end).toLocaleTimeString()}.`;
+    }
+  }
+
+  function getSamplesForDetectionPanel() {
+    const s = activityPhotoSamples;
+    const out = [];
+    for (let i = 0; i < FACE_DETECTION_SLOTS; i++) {
+      out.push({ sample: s[i] || null, label: i + 1 });
+    }
+    return out;
+  }
+
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  function drawFaceDetectionOverlay(ctx, width, height, landmarks) {
+    if (!landmarks || landmarks.length < 3) return false;
+    const pts = landmarks.map((p) => ({ x: p.x * width, y: p.y * height }));
+    const maxNeighborDist = Math.max(width, height) * 0.16;
+    const neighborCount = 6;
+    const triangles = new Set();
+
+    for (let i = 0; i < pts.length; i++) {
+      const base = pts[i];
+      const nearest = [];
+      for (let j = 0; j < pts.length; j++) {
+        if (i === j) continue;
+        const dx = pts[j].x - base.x;
+        const dy = pts[j].y - base.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 > maxNeighborDist * maxNeighborDist) continue;
+        nearest.push({ idx: j, d2 });
+      }
+      nearest.sort((a, b) => a.d2 - b.d2);
+      const n = nearest.slice(0, neighborCount).map((x) => x.idx);
+      for (let a = 0; a < n.length; a++) {
+        for (let b = a + 1; b < n.length; b++) {
+          const j = n[a];
+          const k = n[b];
+          const key = [i, j, k].sort((m, n2) => m - n2).join("-");
+          triangles.add(key);
+        }
+      }
+    }
+
+    ctx.lineWidth = Math.max(0.6, width / 1200);
+    ctx.strokeStyle = "rgba(41, 216, 255, 0.72)";
+    ctx.fillStyle = "rgba(41, 216, 255, 0.08)";
+
+    triangles.forEach((key) => {
+      const [a, b, c] = key.split("-").map(Number);
+      const p1 = pts[a];
+      const p2 = pts[b];
+      const p3 = pts[c];
+      if (!p1 || !p2 || !p3) return;
+
+      const e1 = (p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2;
+      const e2 = (p2.x - p3.x) ** 2 + (p2.y - p3.y) ** 2;
+      const e3 = (p3.x - p1.x) ** 2 + (p3.y - p1.y) ** 2;
+      const maxEdge = Math.max(e1, e2, e3);
+      if (maxEdge > (maxNeighborDist * maxNeighborDist * 1.35)) return;
+
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    return triangles.size > 0;
+  }
+
+  async function createFaceDetectionPreview(src) {
+    if (!src) return "";
+    if (faceDetectionPreviewCache.has(src)) return faceDetectionPreviewCache.get(src);
+    const ready = await ensureMediaPipeReady();
+    if (!ready) {
+      faceDetectionPreviewCache.set(src, "");
+      return "";
+    }
+    try {
+      const img = await loadImage(src);
+      const c = document.createElement("canvas");
+      c.width = img.naturalWidth || 640;
+      c.height = img.naturalHeight || 480;
+      const ctx = c.getContext("2d");
+      if (!ctx) {
+        faceDetectionPreviewCache.set(src, "");
+        return "";
+      }
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      const result = faceLandmarker.detect(c);
+      const landmarks = result.faceLandmarks && result.faceLandmarks.length ? result.faceLandmarks[0] : null;
+      const hasFace = drawFaceDetectionOverlay(ctx, c.width, c.height, landmarks);
+      const out = hasFace ? c.toDataURL("image/jpeg", 0.82) : "";
+      faceDetectionPreviewCache.set(src, out);
+      return out;
+    } catch (err) {
+      console.warn("Failed generating face detection preview:", err);
+      faceDetectionPreviewCache.set(src, "");
+      return "";
+    }
+  }
+
+  async function renderFaceDetectionVisuals() {
+    if (!faceDetectionGrid) return;
+    faceDetectionGrid.textContent = "";
+    const rows = getSamplesForDetectionPanel();
+    const token = ++faceDetectionRenderToken;
+    const cards = rows.map(({ sample, label }) => {
+      const card = document.createElement("figure");
+      if (sample && sample.src) {
+        card.className = "face-detection-card";
+        card.innerHTML = `
+          <figcaption>#${label}</figcaption>
+          <div class="face-detection-pair">
+            <img src="${escapeHtml(sample.src)}" alt="Captured photo ${label}" loading="lazy" />
+            <img data-detect-target="true" alt="Face detection mesh overlay for captured photo ${label}" />
+          </div>
+        `;
+      } else {
+        card.className = "face-detection-card face-detection-card--empty";
+        card.innerHTML = `
+          <figcaption>#${label}</figcaption>
+          <div class="face-detection-pair">
+            <div class="face-detection-placeholder" aria-hidden="true"></div>
+            <div class="face-detection-placeholder" aria-hidden="true"></div>
+          </div>
+        `;
+      }
+      faceDetectionGrid.appendChild(card);
+      return { sample, card };
+    });
+    for (const { sample, card } of cards) {
+      if (!sample || !sample.src) continue;
+      const target = card.querySelector('[data-detect-target="true"]');
+      if (!target) continue;
+      target.classList.add("is-pending");
+      const overlay = await createFaceDetectionPreview(sample.src);
+      if (token !== faceDetectionRenderToken) return;
+      if (overlay) {
+        target.src = overlay;
+        target.classList.remove("is-pending");
+      } else {
+        target.classList.remove("is-pending");
+        target.classList.add("is-fallback");
+        target.src = sample.src;
+      }
     }
   }
 
@@ -779,6 +930,7 @@
       }
       renderActivityTimeline();
       renderTimeTaken();
+      renderFaceDetectionVisuals();
     }
   }
 
@@ -989,6 +1141,7 @@
     if (btnToNextFromMood0) btnToNextFromMood0.disabled = true;
     if (receiptPanel) receiptPanel.innerHTML = "";
     if (activityPhotoGrid) activityPhotoGrid.textContent = "";
+    if (faceDetectionGrid) faceDetectionGrid.textContent = "";
     if (timeTakenValue) timeTakenValue.textContent = "--:--";
     if (timeTakenSub) {
       timeTakenSub.textContent = "The timer starts at first mood selection and ends at receipt view.";

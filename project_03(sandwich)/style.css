@@ -1154,10 +1154,10 @@ body:has(#step4:not([hidden])) .app-main {
 #step4:not([hidden]) .activity-photo-grid {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(7, minmax(0, 1fr));
   gap: 0.2rem;
 }
 
@@ -1175,6 +1175,18 @@ body:has(#step4:not([hidden])) .app-main {
   height: auto;
   aspect-ratio: unset;
   object-fit: cover;
+}
+
+#step4:not([hidden]) .activity-grid-shot.activity-grid-shot--empty {
+  border-style: dashed;
+  border-color: #8f8f8f;
+}
+
+.activity-grid-shot__placeholder {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #f7f7f7;
 }
 
 #step4:not([hidden]) .activity-grid-shot figcaption {
@@ -1271,6 +1283,75 @@ body:has(#step4:not([hidden])) .app-main {
   justify-content: flex-start;
   overflow: hidden;
   min-width: 0;
+}
+
+.receipt-side-title--detect {
+  margin-top: 0.8rem;
+}
+
+.face-detection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+  overflow: auto;
+  min-height: 0;
+  padding-right: 0.1rem;
+  align-content: start;
+}
+
+.face-detection-card {
+  margin: 0;
+  border: 1px solid #0a0a0a;
+  background: #fff;
+}
+
+.face-detection-card figcaption {
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #0a0a0a;
+  padding: 0.06rem 0.15rem;
+}
+
+.face-detection-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #0a0a0a;
+}
+
+.face-detection-pair img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: #fff;
+}
+
+.face-detection-pair img.is-pending {
+  opacity: 0.45;
+}
+
+.face-detection-pair img.is-fallback {
+  filter: grayscale(0.15);
+}
+
+.face-detection-card--empty .face-detection-pair {
+  background: #8f8f8f;
+}
+
+.face-detection-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f7f7f7;
+  border: 1px dashed #9a9a9a;
+}
+
+@media (min-width: 1200px) {
+  .face-detection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 #step4:not([hidden]) .receipt-panel {
