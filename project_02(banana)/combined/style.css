@@ -243,7 +243,15 @@ body {
   border-bottom: 2px solid black;
   padding-bottom: 12px;
 }
-.volatility-subtitle { font-size: 14px; color: #666; }
+.volatility-subtitle {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: clamp(24px, 3.2vw, 40px);
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+}
 
 .back-button-top {
   padding: 10px 20px;
