@@ -3,8 +3,10 @@
 
 PRAGMA foreign_keys = ON;
 
+DROP VIEW IF EXISTS v_official_cpi_yoy;
 DROP VIEW IF EXISTS v_item_price_gaps;
 DROP VIEW IF EXISTS v_city_prices;
+DROP TABLE IF EXISTS official_cpi;
 DROP TABLE IF EXISTS mood_index;
 DROP TABLE IF EXISTS happiness_scores;
 DROP TABLE IF EXISTS city_income;
@@ -52,6 +54,18 @@ CREATE TABLE mood_index (
     feeling_after_sandwich TEXT NOT NULL
 );
 
+-- Official statistical CPI (BLS, BIS, optional e-Stat). Index levels, not USD prices.
+CREATE TABLE official_cpi (
+    source             TEXT NOT NULL,
+    series_id          TEXT NOT NULL,
+    series_name        TEXT NOT NULL,
+    geography          TEXT NOT NULL,
+    item               TEXT NOT NULL,
+    period             TEXT NOT NULL,  -- YYYY-MM
+    index_value        REAL NOT NULL,
+    PRIMARY KEY (series_id, period)
+);
+
 -- Long format for city-to-city joins
 CREATE VIEW v_city_prices AS
 SELECT
@@ -91,3 +105,19 @@ SELECT
     ROUND(100.0 * (nyc_price_usd - tokyo_price_usd) / tokyo_price_usd, 1) AS nyc_pct_premium,
     ROUND(tokyo_price_usd_reported - tokyo_price_usd, 2) AS usd_conversion_error
 FROM commodity_prices;
+
+CREATE VIEW v_official_cpi_yoy AS
+SELECT
+    a.source,
+    a.series_id,
+    a.series_name,
+    a.geography,
+    a.item,
+    a.period,
+    a.index_value,
+    b.index_value AS index_lag_12,
+    ROUND(100.0 * (a.index_value - b.index_value) / b.index_value, 2) AS yoy_pct
+FROM official_cpi a
+LEFT JOIN official_cpi b
+    ON a.series_id = b.series_id
+   AND b.period = strftime('%Y-%m', date(a.period || '-01', '-12 months'));

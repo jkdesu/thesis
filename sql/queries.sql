@@ -343,3 +343,135 @@ SELECT
 FROM commodity_prices
 WHERE category IN ('Groceries', 'Fast food', 'Housing')
 ORDER BY item_id;
+
+-- ============================================================================
+-- 21. Official CPI coverage
+-- ============================================================================
+SELECT
+    source,
+    geography,
+    item,
+    COUNT(*) AS n_months,
+    MIN(period) AS start_period,
+    MAX(period) AS end_period
+FROM official_cpi
+GROUP BY source, geography, item
+ORDER BY geography, item;
+
+-- ============================================================================
+-- 22. Latest 12-month inflation by city / country (all items)
+-- ============================================================================
+SELECT
+    geography,
+    source,
+    period AS latest_period,
+    ROUND(index_value, 2) AS index_value,
+    yoy_pct AS yoy_inflation_pct
+FROM v_official_cpi_yoy
+WHERE item = 'All items'
+  AND period = (SELECT MAX(period) FROM official_cpi o2
+                WHERE o2.series_id = v_official_cpi_yoy.series_id)
+ORDER BY geography;
+
+-- ============================================================================
+-- 23. New York metro vs U.S. city-average inflation (all items)
+-- ============================================================================
+SELECT
+    nyc.period,
+    nyc.yoy_pct AS nyc_yoy,
+    us.yoy_pct AS us_yoy,
+    ROUND(nyc.yoy_pct - us.yoy_pct, 2) AS nyc_minus_us
+FROM v_official_cpi_yoy nyc
+JOIN v_official_cpi_yoy us
+  ON us.period = nyc.period
+ AND us.geography = 'United States'
+ AND us.item = 'All items'
+WHERE nyc.geography = 'New York metro'
+  AND nyc.item = 'All items'
+  AND nyc.yoy_pct IS NOT NULL
+ORDER BY nyc.period DESC
+LIMIT 24;
+
+-- ============================================================================
+-- 24. Food vs shelter inflation in New York (latest 18 months)
+-- ============================================================================
+SELECT
+    food.period,
+    food.yoy_pct AS nyc_food_yoy,
+    shelter.yoy_pct AS nyc_shelter_yoy,
+    core.yoy_pct AS nyc_core_yoy
+FROM v_official_cpi_yoy food
+JOIN v_official_cpi_yoy shelter
+  ON shelter.period = food.period
+ AND shelter.geography = 'New York metro'
+ AND shelter.item = 'Shelter'
+JOIN v_official_cpi_yoy core
+  ON core.period = food.period
+ AND core.geography = 'New York metro'
+ AND core.item = 'Core'
+WHERE food.geography = 'New York metro'
+  AND food.item = 'Food'
+  AND food.yoy_pct IS NOT NULL
+ORDER BY food.period DESC
+LIMIT 18;
+
+-- ============================================================================
+-- 25. Japan (and Tokyo if e-Stat was fetched) vs New York YoY
+-- ============================================================================
+SELECT
+    j.period,
+    j.geography AS japan_geo,
+    j.yoy_pct AS japan_yoy,
+    n.yoy_pct AS nyc_yoy,
+    ROUND(n.yoy_pct - j.yoy_pct, 2) AS nyc_minus_japan
+FROM v_official_cpi_yoy j
+JOIN v_official_cpi_yoy n
+  ON n.period = j.period
+ AND n.geography = 'New York metro'
+ AND n.item = 'All items'
+WHERE j.item = 'All items'
+  AND j.geography IN ('Japan', 'Tokyo')
+  AND j.yoy_pct IS NOT NULL
+ORDER BY j.geography, j.period DESC
+LIMIT 36;
+
+-- ============================================================================
+-- 26. Calendar-year average inflation (official CPI)
+-- ============================================================================
+SELECT
+    geography,
+    item,
+    substr(period, 1, 4) AS year,
+    ROUND(AVG(yoy_pct), 2) AS avg_yoy_pct
+FROM v_official_cpi_yoy
+WHERE yoy_pct IS NOT NULL
+  AND item IN ('All items', 'Food', 'Shelter')
+GROUP BY geography, item, substr(period, 1, 4)
+ORDER BY year DESC, geography, item;
+
+-- ============================================================================
+-- 27. Two different questions: time-series CPI vs cross-city basket
+--     Official CPI = inflation over time. Basket = NYC price level vs Tokyo.
+-- ============================================================================
+SELECT
+    'NYC official CPI, latest YoY %' AS metric,
+    CAST(
+        (SELECT yoy_pct FROM v_official_cpi_yoy
+         WHERE geography = 'New York metro' AND item = 'All items'
+         ORDER BY period DESC LIMIT 1)
+    AS TEXT) AS value
+UNION ALL
+SELECT
+    'Japan official CPI, latest YoY %',
+    CAST(
+        (SELECT yoy_pct FROM v_official_cpi_yoy
+         WHERE geography = 'Japan' AND item = 'All items'
+         ORDER BY period DESC LIMIT 1)
+    AS TEXT)
+UNION ALL
+SELECT
+    'Thesis basket NYC / Tokyo (value-weighted, Tokyo=100)',
+    CAST(
+        (SELECT ROUND(100.0 * SUM(nyc_price_usd) / SUM(tokyo_price_usd), 1)
+         FROM commodity_prices)
+    AS TEXT);

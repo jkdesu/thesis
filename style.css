@@ -87,6 +87,23 @@ body {
   line-height: 1.4;
 }
 
+.hero-data-link {
+  margin: 12px 0 0;
+  font-size: 14px;
+}
+
+.hero-data-link a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-data-link a:hover,
+.hero-data-link a:focus-visible {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
 .gallery {
   width: 100%;
   margin: 0;

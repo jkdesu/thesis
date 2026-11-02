@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SQL_DIR = ROOT / "sql"
 DATA_DIR = ROOT / "project_01(living_cost)"
 MOOD_CSV = ROOT / "project_03(sandwich)" / "mood_index.csv"
+CPI_CSV = ROOT / "data" / "official_cpi" / "official_cpi.csv"
 DB_PATH = ROOT / "analysis" / "thesis.db"
 RESULTS_PATH = ROOT / "analysis" / "query_results.txt"
 
@@ -199,6 +200,30 @@ def load_mood_rows() -> list[tuple]:
     return rows
 
 
+def load_official_cpi_rows() -> list[tuple]:
+    if not CPI_CSV.exists():
+        print(
+            f"No {CPI_CSV.relative_to(ROOT)} yet. "
+            "Run: python3 python/fetch_official_cpi.py"
+        )
+        return []
+    rows = []
+    with CPI_CSV.open(newline="", encoding="utf-8-sig") as handle:
+        for raw in csv.DictReader(handle):
+            rows.append(
+                (
+                    raw["source"],
+                    raw["series_id"],
+                    raw["series_name"],
+                    raw["geography"],
+                    raw["item"],
+                    raw["period"],
+                    float(raw["index_value"]),
+                )
+            )
+    return rows
+
+
 def build_database() -> sqlite3.Connection:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     if DB_PATH.exists():
@@ -241,6 +266,16 @@ def build_database() -> sqlite3.Connection:
         """,
         load_mood_rows(),
     )
+    cpi_rows = load_official_cpi_rows()
+    if cpi_rows:
+        conn.executemany(
+            """
+            INSERT INTO official_cpi (
+                source, series_id, series_name, geography, item, period, index_value
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            cpi_rows,
+        )
     conn.commit()
     return conn
 
@@ -294,7 +329,11 @@ def main() -> None:
 
     conn = build_database()
     n_items = conn.execute("SELECT COUNT(*) FROM commodity_prices").fetchone()[0]
-    print(f"Wrote {DB_PATH.relative_to(ROOT)} with {n_items} commodity rows.")
+    n_cpi = conn.execute("SELECT COUNT(*) FROM official_cpi").fetchone()[0]
+    print(
+        f"Wrote {DB_PATH.relative_to(ROOT)} with {n_items} commodity rows "
+        f"and {n_cpi} official CPI months."
+    )
 
     flags = conn.execute(
         """

@@ -4,7 +4,12 @@
 
 An interactive digital exhibition about everyday volatility: how the same goods, rituals, and feelings change between Tokyo and New York. Three web studies sit on top of a cleaned commodity-price basket, income figures, and mood labels.
 
-The living-cost piece uses a **CPI-style basket** (a fixed set of everyday items priced in both cities), not the official BLS or Statistics Bureau of Japan CPI time series. SQL then turns that basket into regional price indexes, purchasing-power ratios, and housing-burden stats.
+Two price layers sit side by side:
+
+1. A **30-item Tokyo / New York basket** (your own prices) for *level* differences between cities.
+2. **Official CPI time series** from statistical agencies for *inflation over time*.
+
+They answer different questions. CPI is not a Tokyo-vs-NYC shopping list; the shopping list is not official inflation.
 
 ## Exhibition
 
@@ -32,8 +37,34 @@ python3 -m http.server 8000
 | `project_01(living_cost)/Monthly_Income_JPY_USD.csv` | Median earnings, disposable income, rent, utilities |
 | `project_01(living_cost)/Happiness_Dataset.csv` | 1–10 scores for five quality-of-life dimensions |
 | `project_03(sandwich)/mood_index.csv` | Observation / feeling labels for the sandwich study |
+| `data/official_cpi/official_cpi.csv` | Official monthly CPI pulled by `python/fetch_official_cpi.py` |
 
 FX rate used in the interface and in SQL: **156.9 JPY per USD**.
+
+## Official CPI APIs
+
+```bash
+python3 python/fetch_official_cpi.py
+python3 python/load_and_analyze.py --run-queries
+```
+
+Then open `analysis/cpi_trends.html`.
+
+| Geography | Source | Key needed? |
+| --- | --- | --- |
+| United States (CPI-U all items, food, shelter, core) | [BLS Public Data API](https://www.bls.gov/developers/) series `CUUR0000SA0` etc. | No (v1). Optional `BLS_API_KEY` for v2 / 20 years |
+| New York–Newark–Jersey City | BLS `CUURS12ASA0` (and food/shelter/core) | Same |
+| Japan, national | [BIS long CPI](https://data.bis.org/) `M.JP.628` | No |
+| Tokyo, Ku-area | [e-Stat](https://www.e-stat.go.jp/api/) table `0003427113`, area `13A01` | Yes: `ESTAT_APP_ID` |
+
+Free BLS registration: [api.bls.gov signup](https://data.bls.gov/registrationEngine/).  
+e-Stat: create an account, issue an application ID, then:
+
+```bash
+ESTAT_APP_ID=your_id python3 python/fetch_official_cpi.py
+```
+
+Python uses the stdlib only (`urllib`, `csv`, `json`, `sqlite3`).
 
 Python recomputes Tokyo USD as `yen / 156.9` so CSV typos (for example chicken breast listed at `$0.04`) do not leak into the index.
 
@@ -42,7 +73,7 @@ Python recomputes Tokyo USD as `yen / 156.9` so CSV typos (for example chicken b
 ```text
 python/load_and_analyze.py   extract, clean, load CSVs → SQLite
 sql/schema.sql               tables + views
-sql/queries.sql              20 analytical queries
+sql/queries.sql              basket + official CPI queries
 analysis/thesis.db           generated database
 ```
 
@@ -73,6 +104,7 @@ The loader strips `$`, commas, and extra spaces from the CSVs, assigns categorie
 17–18. Happiness scores vs the price index
 19. Mood-index inventory
 20. FX sensitivity: yen ±10%
+21–27. Official CPI coverage, latest YoY, NYC vs U.S., food vs shelter, Japan vs NYC, calendar-year averages, CPI vs basket
 
 Example: after loading, this is the core CPI-style comparison.
 
@@ -87,13 +119,11 @@ Tokyo = 100. An unweighted NYC index of ~180 means the typical item in this bask
 
 ## Suggested resume line
 
-> Leveraged SQL and Python to extract, clean, and analyze a CPI-style commodity basket for Tokyo and New York (price indexes, purchasing power, housing burden), and built an interactive web exhibition of inflation-like regional price gaps.
-
-If a job post wants “official CPI,” say **CPI-style / cost-of-living basket** unless you add BLS or Japanese CPI series later.
+> Extracted official CPI from the BLS and Japan national series via API, cleaned a 30-item Tokyo–New York price basket in Python/SQL, and built an interactive web exhibition of inflation trends and regional price gaps.
 
 ## Stack
 
-- **Python 3** (stdlib only: `csv`, `sqlite3`)
+- **Python 3** (stdlib: `csv`, `sqlite3`, `urllib`)
 - **SQLite**
 - **HTML / CSS / JavaScript**
 - Webcam APIs in projects 01 and 02 (permission required)
