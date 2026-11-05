@@ -117,10 +117,6 @@ FROM commodity_prices;
 
 Tokyo = 100. An unweighted NYC index of ~180 means the typical item in this basket costs about 80% more in New York.
 
-## Suggested resume line
-
-> Extracted official CPI from the BLS and Japan national series via API, cleaned a 30-item Tokyo–New York price basket in Python/SQL, and built an interactive web exhibition of inflation trends and regional price gaps.
-
 ## Stack
 
 - **Python 3** (stdlib: `csv`, `sqlite3`, `urllib`)
